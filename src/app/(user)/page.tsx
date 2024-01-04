@@ -6,11 +6,11 @@ import Header from '@/components/header/user.header'
 const Home = async () => {
     const session = await getServerSession(authOptions)
     return (
-        <section>
+        <div className='w-full h-full'>
             <Header />
-            <div>{JSON.stringify(session)}</div>
+            {/* <div>{JSON.stringify(session)}</div> */}
 
-        </section>
+        </div>
 
     )
 }

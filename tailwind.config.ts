@@ -14,19 +14,15 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       colors: {
-        main: "#FC8019",
-        secondaryColor: "#fc8e32",
-        borderSecondaryColor: "#fd9c4b",
-        darkModeBg: "#001529",
-        darkModeBgBox: "#794c2f6b"
+        main: "#7843e6",
       },
     },
     screens: {
       xs: "320px",
       sm: "640px",
       md: "768px",
-      lg: "1024px",
-      xl: "1280px"
+      lg: "992px",
+      xl: "1024px"
     },
   },
   darkMode: "class",

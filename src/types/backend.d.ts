@@ -16,22 +16,19 @@ declare global {
         createdAt: Date
         updatedAt: Date
     }
+
     interface IBackendRes<T> {
         error?: string | string[];
         message: string;
         statusCode: number | string;
         success: boolean;
         data?: T;
-    }
-
-    interface IModelPaginate<T> {
-        meta: {
+        meta?: {
             current: number;
             pageSize: number;
             pages: number;
             total: number;
-        },
-        data: T
+        }
     }
 
 }

@@ -3,48 +3,50 @@
 import { useRouter } from 'next/navigation';
 import { BiCategoryAlt, BiUser } from 'react-icons/bi';
 import { AiOutlineSearch, AiOutlineShoppingCart, AiOutlineHeart } from 'react-icons/ai';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Input, Dropdown, Space, Drawer, Popover, Col, Avatar, Menu, message, Badge, MenuProps } from 'antd';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Input, Dropdown, Space, Drawer, Popover, Col, Avatar, Menu, message, Badge } from 'antd';
 import { LayoutTwoTone, UserOutlined } from '@ant-design/icons';
-
+import type { MenuProps } from 'antd';
 import PopoverCustom from "./_sub/pop";
 import { omit } from 'lodash';
 import Link from 'next/link';
 import useQueryConfig from '@/hooks/useSearchParam';
 import { sendRequest } from '@/hooks/sendRequest';
 import { url } from '@/utils/const';
-
+import "./header.css"
+interface IMenu {
+    label: any,
+    key: string | number
+}
 
 const Header = () => {
     const router = useRouter()
-    const [listCategory, setListCategory] = useState<ICategory[]>([]);
+    const [listCategory, setListCategory] = useState<IMenu[] | undefined>();
     const [search, setSearch] = useState('');
     const [widthImage, setWidthImage] = useState(150);
     const [open, setOpen] = useState(false);
     const queryConfig = useQueryConfig();
 
 
-
-    // const getData = async () => {
-    //     let data = (await callCategory()).map(item => ({
-    //         key: item.id,
-    //         label: (<Link className='item-cat' to={{
-    //             pathname: '/shop', search: createSearchParams({
-    //                 ...queryConfig,
-    //                 category: item.id
-    //             }).toString()
-    //         }}>
-    //             {item.name}
-    //         </Link>)
-    //     }));
-    //     setItems(data);
-    // };
-
-
     const fetchData = useCallback(async () => {
-        const response = await sendRequest<IBackendRes<IModelPaginate<ICategory[]>>>({ url: `${url}categories` });
-        console.log(response.data)
-        // setListCategory(response.data)
+        try {
+            const response = await sendRequest<IBackendRes<ICategory[]>>({ url: `${url}categories` });
+            if (response && response.data) {
+                let data: IMenu[] = response?.data?.map((item: ICategory) => ({
+                    key: item.id,
+                    label: <Link className='item-cat' href={{
+                        pathname: '/shop', search: new URLSearchParams({
+                            category: item.id.toString()
+                        }).toString()
+                    }}>
+                        {item.name}
+                    </Link>
+                }));
+                setListCategory(data)
+            }
+        } catch (error) {
+            console.log(error)
+        }
     }, []);
 
     useEffect(() => {
@@ -143,17 +145,16 @@ const Header = () => {
     const cart: any = []
     const wish: any = []
     return (
-        <div className='header-area '>
-            <div className='header-area__container cs'>
-                <Link href={'/'} className='logo'> <img src={"logo.png"} width={widthImage} /></Link>
-
-                <div className='nav_search'>
-                    <Dropdown overlayClassName='container-category '
-                    // menu={{
-                    //     items
-                    // }}
+        <div className='bg-white w-full xs:h-[64px] md:h-[84px] text-gray-500 sticky top-0 z-50 transition duration-300'>
+            <div className=' w-full xs:px-5 lg:px-16 flex flex-wrap items-center justify-between h-full m-auto cursor-pointer'>
+                <Link href={'/'} className=' xs:w-0 md:w-3/12'> <img src={"logo.png"} width={widthImage} /></Link>
+                <div>
+                    <Dropdown overlayClassName='xs:top-[64px] md:top-[94px] w-[300px] left-1/2'
+                        menu={{
+                            items: listCategory
+                        }}
                     >
-                        <div className='nav_category  me-4'>
+                        <div className='nav_category  me-3'>
                             <a onClick={(e) => handleBoxCat(e)}>
                                 <Space>
                                     <BiCategoryAlt size={35} />
@@ -161,27 +162,24 @@ const Header = () => {
                             </a>
                         </div>
                     </Dropdown>
-                    <Input placeholder="Tìm kiếm sản phẩm" value={search} onPressEnter={(e) => onSubmitSearch(e)} onChange={(e) => setSearch(e.target.value)} />
-                    <button className='box-search' onClick={() => onSubmitSearch('submit')}><AiOutlineSearch /></button>
                 </div>
-                <div className="nav-area-icon ps-2">
-                    <div className="nav-icon  wish-list">
+                <div className=' flex-1 h-[75%] relative flex items-center'>
+                    <Input placeholder="Tìm kiếm sản phẩm" value={search} onPressEnter={(e) => onSubmitSearch(e)} onChange={(e) => setSearch(e.target.value)} size='large' />
+                    <button className='absolute right-3 bg-main text-[aliceblue] rounded-xl py-2 px-4 flex justify-center items-center' onClick={() => onSubmitSearch('submit')}><AiOutlineSearch /></button>
+                </div>
+                <div className=" xs:w-1/12 sm:w-3/12 ms-2 flex justify-end items-center gap-x-5 ">
+                    <div className="nav-icon ">
                         <Badge count={wish?.length ?? 0} size={'small'} overflowCount={10}>
                             <AiOutlineHeart size={25} onClick={() => router.push('/wish')} />
                         </Badge>
-
-                        <span className='nav-cover-text'>Yêu thích</span>
+                        <span className='xs:hidden xl:block'>Yêu thích</span>
                     </div>
                     <PopoverCustom cart={cart}>
-                        <div className="nav-icon">
-
-
+                        <div className="nav-icon ">
                             <Badge count={cart?.length ?? 0} size={'small'} overflowCount={10}>
                                 <AiOutlineShoppingCart color='grey' size={25} onClick={() => router.push('/cart')} />
                             </Badge>
-
-                            <span className='nav-cover-text'>Giỏ hàng</span>
-
+                            <span className='xs:hidden xl:block'>Giỏ hàng</span>
                         </div>
                     </PopoverCustom>
                     <div className="nav-icon "  >
@@ -189,7 +187,7 @@ const Header = () => {
                             <Dropdown menu={{ items: itemsAccount }} trigger={['click']} placement="bottomRight" >
                                 <div className='space-avatar'>
                                     <Avatar src={user.avatar} size={25} />
-                                    <span className='nav-cover-text' >{user?.name}</span>
+                                    <span className='xs:hidden xl:block' >{user?.name}</span>
                                 </div>
                             </Dropdown>
                         ) : (
@@ -197,7 +195,7 @@ const Header = () => {
                         )} */}
                         <>
                             <BiUser size={25} onClick={() => router.push('/login')} />
-                            <span className='nav-cover-text' onClick={() => router.push('/login')}>Tài Khoản</span>
+                            <span className='xs:hidden xl:block' onClick={() => router.push('/login')}>Tài Khoản</span>
                         </>
                     </div>
 
@@ -210,13 +208,13 @@ const Header = () => {
                 onClose={() => setOpen(false)}
                 open={open}
             >
-                {/* {listCategory?.map((item, i) => {
+                {listCategory?.map((item, i) => {
                     return (
                         <Col key={`image-${i}`}>
                             <div className='item-cat'>{item?.label}</div>
                         </Col>
                     );
-                })} */}
+                })}
             </Drawer>
         </div >
 
