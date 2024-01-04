@@ -164,7 +164,7 @@ const Header = () => {
                     </Dropdown>
                 </div>
                 <div className=' flex-1 h-[75%] relative flex items-center'>
-                    <Input placeholder="Tìm kiếm sản phẩm" value={search} onPressEnter={(e) => onSubmitSearch(e)} onChange={(e) => setSearch(e.target.value)} size='large' />
+                    <Input placeholder="Tìm kiếm sản phẩm" value={search} onPressEnter={(e) => onSubmitSearch(e)} onChange={(e) => setSearch(e.target.value)} size='large' style={{ padding: 10 }} />
                     <button className='absolute right-3 bg-main text-[aliceblue] rounded-xl py-2 px-4 flex justify-center items-center' onClick={() => onSubmitSearch('submit')}><AiOutlineSearch /></button>
                 </div>
                 <div className=" xs:w-1/12 sm:w-3/12 ms-2 flex justify-end items-center gap-x-5 ">
@@ -177,7 +177,7 @@ const Header = () => {
                     <PopoverCustom cart={cart}>
                         <div className="nav-icon ">
                             <Badge count={cart?.length ?? 0} size={'small'} overflowCount={10}>
-                                <AiOutlineShoppingCart color='grey' size={25} onClick={() => router.push('/cart')} />
+                                <AiOutlineShoppingCart size={25} onClick={() => router.push('/cart')} />
                             </Badge>
                             <span className='xs:hidden xl:block'>Giỏ hàng</span>
                         </div>

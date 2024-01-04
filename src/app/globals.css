@@ -41,7 +41,23 @@ body {
   font-weight: 400;
   font-size: 16px;
   line-height: 1;
-  background: red;
+  background: rgb(237, 229, 229);
+}
+
+.mySwiper img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  object-fit: fill;
+}
+
+
+@media only screen and (min-width: 768px) {
+  .break-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 /* :root {
