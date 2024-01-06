@@ -40,7 +40,7 @@ const Banner = () => {
                     </Swiper>
                 </div>
 
-                <div className='sm:w-[30%] flex flex-col gap-y-2'>
+                <div className='xs:hidden sm:flex sm:w-[30%] flex-col gap-y-2'>
                     <div className='flex-1'>
                         <img src="https://cdn0.fahasa.com/media/wysiwyg/Thang-06-2023/VnPayT6_392%20x%20156.png" alt="" className='w-full h-full rounded-md' />
                     </div>

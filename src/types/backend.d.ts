@@ -16,7 +16,19 @@ declare global {
         createdAt: Date
         updatedAt: Date
     }
+    interface IUser {
 
+        id: number,
+        username: string | null,
+        email: string,
+        phone: string | null,
+        type: string | null,
+        avatar: string | null,
+        address: string | null,
+        role: string,
+        gender: string
+
+    }
     interface IBackendRes<T> {
         error?: string | string[];
         message: string;

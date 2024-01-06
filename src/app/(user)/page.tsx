@@ -10,11 +10,10 @@ import Banner from "@/components/banner";
 
 const Home = async () => {
     const session = await getServerSession(authOptions);
-
     return (
         <div className='w-full md:w-11/12 lg:w-10/12 mx-auto min-h-full mt-3'>
             <Banner />
-
+            <p>{JSON.stringify(session)}</p>
         </div>
 
     )

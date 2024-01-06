@@ -1,5 +1,5 @@
 "use client"
-
+import "@/styles/header.css";
 import { useRouter } from 'next/navigation';
 import { BiCategoryAlt, BiUser } from 'react-icons/bi';
 import { AiOutlineSearch, AiOutlineShoppingCart, AiOutlineHeart } from 'react-icons/ai';
@@ -13,14 +13,16 @@ import Link from 'next/link';
 import useQueryConfig from '@/hooks/useSearchParam';
 import { sendRequest } from '@/hooks/sendRequest';
 import { url } from '@/utils/const';
-import "./header.css"
+import { signOut, useSession } from "next-auth/react";
+import { signIn } from "next-auth/react"
 interface IMenu {
     label: any,
     key: string | number
 }
 
 const Header = () => {
-    const router = useRouter()
+    const router = useRouter();
+    const { data } = useSession()
     const [listCategory, setListCategory] = useState<IMenu[] | undefined>();
     const [search, setSearch] = useState('');
     const [widthImage, setWidthImage] = useState(150);
@@ -29,29 +31,27 @@ const Header = () => {
 
 
     const fetchData = useCallback(async () => {
-        try {
-            const response = await sendRequest<IBackendRes<ICategory[]>>({ url: `${url}categories` });
-            if (response && response.data) {
-                let data: IMenu[] = response?.data?.map((item: ICategory) => ({
-                    key: item.id,
-                    label: <Link className='item-cat' href={{
-                        pathname: '/shop', search: new URLSearchParams({
-                            category: item.id.toString()
-                        }).toString()
-                    }}>
-                        {item.name}
-                    </Link>
-                }));
-                setListCategory(data)
-            }
-        } catch (error) {
-            console.log(error)
+
+        const response = await sendRequest<IBackendRes<ICategory[]>>({ url: `${url}categories` });
+        if (response && response.data) {
+            let data: IMenu[] = response?.data?.map((item: ICategory) => ({
+                key: item.id,
+                label: <Link className='item-cat' href={{
+                    pathname: '/shop', search: new URLSearchParams({
+                        category: item.id.toString()
+                    }).toString()
+                }}>
+                    {item.name}
+                </Link>
+            }));
+            setListCategory(data)
         }
+
     }, []);
 
     useEffect(() => {
         fetchData();
-    }, [fetchData]);
+    }, []);
     const itemsAccount: MenuProps['items'] = [
         {
             label: (
@@ -79,7 +79,7 @@ const Header = () => {
         },
         {
             label: (
-                <label >
+                <label onClick={() => signOut()}>
                     Đăng xuất
                 </label>
             ),
@@ -149,9 +149,10 @@ const Header = () => {
             <div className=' w-full xs:px-5 lg:px-16 flex flex-wrap items-center justify-between h-full m-auto cursor-pointer'>
                 <Link href={'/'} className=' xs:w-0 md:w-3/12'> <img src={"logo.png"} width={widthImage} /></Link>
                 <div>
-                    <Dropdown overlayClassName='xs:top-[64px] md:top-[94px] w-[300px] left-1/2'
+                    <Dropdown
+                        overlayStyle={{ top: 74, left: "25%" }}
                         menu={{
-                            items: listCategory
+                            items: listCategory || []
                         }}
                     >
                         <div className='nav_category  me-3'>
@@ -183,20 +184,20 @@ const Header = () => {
                         </div>
                     </PopoverCustom>
                     <div className="nav-icon "  >
-                        {/* {isAuthenticated && user?.name ? (
+                        {data?.user ? (
                             <Dropdown menu={{ items: itemsAccount }} trigger={['click']} placement="bottomRight" >
-                                <div className='space-avatar'>
-                                    <Avatar src={user.avatar} size={25} />
-                                    <span className='xs:hidden xl:block' >{user?.name}</span>
+                                <div className='flex flex-col gap-1.5 items-center'>
+                                    {data.user.avatar ? <Avatar src={data.user.avatar} size={25} /> : <BiUser size={24} />}
+                                    <span className='xs:hidden xl:block' >hyhyuh</span>
                                 </div>
                             </Dropdown>
                         ) : (
-                            
-                        )} */}
-                        <>
-                            <BiUser size={25} onClick={() => router.push('/login')} />
-                            <span className='xs:hidden xl:block' onClick={() => router.push('/login')}>Tài Khoản</span>
-                        </>
+                            <>
+                                <BiUser size={25} onClick={() => router.push('/login')} />
+                                <span className='xs:hidden xl:block' onClick={() => router.push('/login')}>Tài Khoản</span>
+                            </>
+                        )}
+
                     </div>
 
                 </div>

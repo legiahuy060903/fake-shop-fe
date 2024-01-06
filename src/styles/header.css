@@ -14,12 +14,7 @@
     font-size: 0.7rem;
 }
 
-.space-avatar {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    gap: 0.8rem;
-}
+
 
 @media only screen and (max-width: 640px) {
     .nav-icon {

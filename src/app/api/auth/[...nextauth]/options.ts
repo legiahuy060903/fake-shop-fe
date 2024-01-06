@@ -3,37 +3,30 @@ import GoogleProvider from 'next-auth/providers/google';
 import FacebookProvider from 'next-auth/providers/facebook';
 import GithubProvider from 'next-auth/providers/github';
 import CredentialsProvider from "next-auth/providers/credentials";
+import { sendRequest } from '@/hooks/sendRequest';
+import { url } from '@/utils/const';
+import { JWT } from 'next-auth/jwt';
 
 
 export const authOptions: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET as string,
     providers: [
-        // CredentialsProvider({
-        //     // The name to display on the sign in form (e.g. "Sign in with...")
-        //     name: "Credentials",
-        //     // `credentials` is used to generate a form on the sign in page.
-        //     // You can specify which fields should be submitted, by adding keys to the `credentials` object.
-        //     // e.g. domain, username, password, 2FA token, etc.
-        //     // You can pass any HTML attribute to the <input> tag through the object.
-        //     credentials: {
-        //         username: { label: "Username", type: "text", placeholder: "hoidanit@gmail.com", userRole: "admin" },
-        //         password: { label: "Password", type: "password", placeholder: "123456" }
-        //     },
-        //     async authorize(credentials, req) {
-        //         // Add logic here to look up the user from the credentials supplied
-        //         const user = { id: "1", name: "Hỏi Dân IT", email: "hoidanit@gmail.com", userRole: "admin" }
+        CredentialsProvider({
+            name: "Fake Book",
+            credentials: {
+                username: { label: "Username", type: "text" },
+                password: { label: "Password", type: "password" }
+            },
+            async authorize(credentials, req) {
+                const res = await sendRequest<IBackendRes<JWT>>({
+                    url: `${url}auth/login`, method: "POST",
+                    body: { username: credentials?.username, password: credentials?.password }
+                })
 
-        //         if (user) {
-        //             // Any object returned will be saved in `user` property of the JWT
-        //             return user
-        //         } else {
-        //             // If you return null then an error will be displayed advising the user to check their details.
-        //             return null
-
-        //             // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
-        //         }
-        //     }
-        // }),
+                if (res && res.data) return res.data as any;
+                else throw new Error(res.message)
+            }
+        }),
 
         // FacebookProvider({
         //     clientId: process.env.FACEBOOK_ID as string,
@@ -48,9 +41,32 @@ export const authOptions: NextAuthOptions = {
             clientSecret: process.env.GITHUB_SECRET as string,
         }),
     ],
-    // callbacks: {
-    //     async jwt({ token, account }) {
-    //         return token;
-    //     },
-    // },
+    callbacks: {
+        async jwt({ token, user, account, profile, trigger, session }) {
+            if (trigger === "signIn" && account?.provider !== "credentials") {
+                const { data } = await sendRequest<IBackendRes<JWT>>({
+                    url: `${url}auth/login-social`,
+                    method: "POST",
+                    body: { email: user.email, username: user.name, type: account?.provider }
+                })
+                if (data) token = data;
+                return token
+            }
+            if (trigger === "signIn" && account?.provider === "credentials") {
+                if (user) token = user as unknown as JWT
+            }
+            return token;
+        },
+        session({ session, token, user }) {
+            if (token) {
+                session.access_token = token.access_token;
+                session.refreshToken = token.refreshToken;
+                session.user = token.user;
+            }
+            return session
+        }
+    },
+    pages: {
+        signIn: "/login"
+    }
 };
