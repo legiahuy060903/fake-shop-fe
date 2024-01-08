@@ -97,9 +97,7 @@ const Header = () => {
     //         key: 'admin',
     //     });
     // }
-    const gtgt = () => {
 
-    }
     const handleBoxCat = (e: any) => {
         if (window.innerWidth < 768) {
             setOpen(true);
@@ -144,9 +142,9 @@ const Header = () => {
     const cart: any = []
     const wish: any = []
     return (
-        <div className='bg-white w-full xs:h-[64px] md:h-[84px] text-gray-500 sticky top-0 z-50 transition duration-300'>
-            <div className=' w-full xs:px-5 lg:px-16 flex flex-wrap items-center justify-between h-full m-auto cursor-pointer'>
-                <Link href={'/'} className=' xs:w-0 md:w-3/12'> <img src={"logo.png"} width={widthImage} /></Link>
+        <div className='bg-white w-full xs:h-[64px] h-[84px] text-gray-500 sticky top-0 z-50 transition duration-300'>
+            <div className=' w-full xs:px-5 px-16 flex flex-wrap items-center justify-between h-full m-auto cursor-pointer'>
+                <Link href={'/'} className=' xs:w-0 w-3/12'> <img src={"logo.png"} width={widthImage} /></Link>
                 <div>
                     <Dropdown
                         overlayStyle={{ top: 74, left: "25%" }}
@@ -167,7 +165,7 @@ const Header = () => {
                     <Input placeholder="Tìm kiếm sản phẩm" value={search} onPressEnter={(e) => onSubmitSearch(e)} onChange={(e) => setSearch(e.target.value)} size='large' style={{ padding: 10 }} />
                     <button className='absolute right-3 bg-main text-[aliceblue] rounded-xl py-2 px-4 flex justify-center items-center' onClick={() => onSubmitSearch('submit')}><AiOutlineSearch /></button>
                 </div>
-                <div className=" xs:w-1/12 sm:w-3/12 ms-2 flex justify-end items-center gap-x-5 ">
+                <div className=" xs:w-1/12 w-3/12 xs:ms-2 flex justify-end items-center gap-x-5 ">
                     <div className="nav-icon ">
                         <Badge count={wish?.length ?? 0} size={'small'} overflowCount={10}>
                             <AiOutlineHeart size={25} onClick={() => router.push('/wish')} />

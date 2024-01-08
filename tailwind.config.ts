@@ -18,12 +18,18 @@ const config: Config = {
       },
     },
     screens: {
-      xs: "320px",
-      sm: "640px",
-      md: "768px",
-      lg: "992px",
-      xl: "1024px"
-    },
+      xl: { max: '1279px' },
+      // => @media (max-width: 1279px) { ... }
+
+      lg: { max: '1023px' },
+      // => @media (max-width: 1023px) { ... }
+
+      md: { max: '767px' },
+      // => @media (max-width: 767px) { ... }
+
+      xs: { max: '639px' },
+      // => @media (max-width: 639px) { ... }
+    }
   },
   darkMode: "class",
 

@@ -17,7 +17,7 @@ const Banner = () => {
     return (
         <>
             <div className='overflow-hidden mx-auto flex gap-x-3 bg-white rounded-md '>
-                <div className='xs:w-full sm:w-[70%] relative bg-white rounded-md '>
+                <div className='xs:w-full w-[70%] relative bg-white rounded-md '>
                     <Swiper
                         modules={[Autoplay, Navigation, Pagination]}
                         loop={false}
@@ -40,7 +40,7 @@ const Banner = () => {
                     </Swiper>
                 </div>
 
-                <div className='xs:hidden sm:flex sm:w-[30%] flex-col gap-y-2'>
+                <div className='xs:hidden flex w-[30%] flex-col gap-y-2'>
                     <div className='flex-1'>
                         <img src="https://cdn0.fahasa.com/media/wysiwyg/Thang-06-2023/VnPayT6_392%20x%20156.png" alt="" className='w-full h-full rounded-md' />
                     </div>
@@ -49,13 +49,13 @@ const Banner = () => {
                     </div>
                 </div>
             </div >
-            <div className="bg-white rounded-md grid xs:grid-cols-2 place-content-center md:grid-cols-4 place-items-center gap-5 my-3 p-2">
+            <div className="bg-white rounded-md grid xs:grid-cols-2 place-content-center grid-cols-4 place-items-center gap-5 my-3 p-2">
                 <img src="https://cdn0.fahasa.com/media/wysiwyg/Thang-06-2023/SubBannerT6_Coupon_310x210-06.png" />
                 <img src="https://cdn0.fahasa.com/media/wysiwyg/Thang-06-2023/TrangBalo_Resize_310x210.png" />
                 <img src="https://cdn0.fahasa.com/media/wysiwyg/Thang-06-2023/Tamlinh_mainbanner_T6_Smallbanner_310x210.png" />
                 <img src="https://cdn0.fahasa.com/media/wysiwyg/Thang-06-2023/TuSachThieuNhi_T623_Banner_SmallBanner_310x210.png" />
             </div>
-            <div className='my-3 px-1 py-3 bg-white rounded-md grid md:grid-cols-8  place-content-center xs:grid-cols-4 gap-2 place-items-center' >
+            <div className='my-3 px-1 py-3 bg-white rounded-md grid grid-cols-8  place-content-center xs:grid-cols-4 gap-2 place-items-center' >
 
                 <div className='flex flex-col items-center gap-y-2 overflow-hidden'>
                     <img src="https://cdn0.fahasa.com/media/wysiwyg/icon-menu/Icon_FlashSale_Thuong_120x120.png" width={50} />
