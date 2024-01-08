@@ -1,11 +1,12 @@
-import NextAuth from "next-auth";
-import { JWT } from "next-auth/jwt";
 
+import { JWT } from "next-auth/jwt";
+import NextAuth, { DefaultSession } from "next-auth"
 declare module "next-auth/jwt" {
     interface JWT {
         user: IUser,
         access_token: string,
         refreshToken: string,
+        expires: string,
     }
 }
 declare module "next-auth" {
@@ -13,5 +14,6 @@ declare module "next-auth" {
         user: IUser,
         access_token: string,
         refreshToken: string,
+        expires: string,
     }
 }

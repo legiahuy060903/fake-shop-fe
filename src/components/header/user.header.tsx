@@ -22,16 +22,15 @@ interface IMenu {
 
 const Header = () => {
     const router = useRouter();
-    const { data } = useSession()
+    const { data, status } = useSession()
     const [listCategory, setListCategory] = useState<IMenu[] | undefined>();
     const [search, setSearch] = useState('');
     const [widthImage, setWidthImage] = useState(150);
     const [open, setOpen] = useState(false);
     const queryConfig = useQueryConfig();
-
+    //cccc
 
     const fetchData = useCallback(async () => {
-
         const response = await sendRequest<IBackendRes<ICategory[]>>({ url: `${url}categories` });
         if (response && response.data) {
             let data: IMenu[] = response?.data?.map((item: ICategory) => ({
@@ -46,7 +45,6 @@ const Header = () => {
             }));
             setListCategory(data)
         }
-
     }, []);
 
     useEffect(() => {
@@ -173,14 +171,12 @@ const Header = () => {
                         <Badge count={wish?.length ?? 0} size={'small'} overflowCount={10}>
                             <AiOutlineHeart size={25} onClick={() => router.push('/wish')} />
                         </Badge>
-                        <span className='xs:hidden xl:block'>Yêu thích</span>
                     </div>
                     <PopoverCustom cart={cart}>
                         <div className="nav-icon ">
                             <Badge count={cart?.length ?? 0} size={'small'} overflowCount={10}>
                                 <AiOutlineShoppingCart size={25} onClick={() => router.push('/cart')} />
                             </Badge>
-                            <span className='xs:hidden xl:block'>Giỏ hàng</span>
                         </div>
                     </PopoverCustom>
                     <div className="nav-icon "  >
@@ -188,13 +184,11 @@ const Header = () => {
                             <Dropdown menu={{ items: itemsAccount }} trigger={['click']} placement="bottomRight" >
                                 <div className='flex flex-col gap-1.5 items-center'>
                                     {data.user.avatar ? <Avatar src={data.user.avatar} size={25} /> : <BiUser size={24} />}
-                                    <span className='xs:hidden xl:block' >hyhyuh</span>
                                 </div>
                             </Dropdown>
                         ) : (
                             <>
                                 <BiUser size={25} onClick={() => router.push('/login')} />
-                                <span className='xs:hidden xl:block' onClick={() => router.push('/login')}>Tài Khoản</span>
                             </>
                         )}
 

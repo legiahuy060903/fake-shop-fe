@@ -7,6 +7,11 @@ import { sendRequest } from '@/hooks/sendRequest';
 import { url } from '@/utils/const';
 import { JWT } from 'next-auth/jwt';
 
+async function refreshAccessToken(refreshToken: string) {
+    const { data, success, message } = await sendRequest<IBackendRes<JWT>>({ url: `${url}auth/refresh`, body: { refreshToken }, method: "POST" });
+    if (success) return data as any;
+    else throw new Error(message)
+}
 
 export const authOptions: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET as string,
@@ -55,13 +60,14 @@ export const authOptions: NextAuthOptions = {
             if (trigger === "signIn" && account?.provider === "credentials") {
                 if (user) token = user as unknown as JWT
             }
+            if (Date.now() > +token.expires) {
+                return await refreshAccessToken(token.refreshToken)
+            }
             return token;
         },
         session({ session, token, user }) {
             if (token) {
-                session.access_token = token.access_token;
-                session.refreshToken = token.refreshToken;
-                session.user = token.user;
+                session = token;
             }
             return session
         }
