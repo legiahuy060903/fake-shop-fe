@@ -28,7 +28,6 @@ const Header = () => {
     const [widthImage, setWidthImage] = useState(150);
     const [open, setOpen] = useState(false);
     const queryConfig = useQueryConfig();
-    //cccc
 
     const fetchData = useCallback(async () => {
         const response = await sendRequest<IBackendRes<ICategory[]>>({ url: `${url}categories` });
@@ -98,7 +97,9 @@ const Header = () => {
     //         key: 'admin',
     //     });
     // }
+    const gtgt = () => {
 
+    }
     const handleBoxCat = (e: any) => {
         if (window.innerWidth < 768) {
             setOpen(true);
