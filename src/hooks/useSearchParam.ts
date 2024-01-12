@@ -19,8 +19,7 @@ export default function useQueryConfig(): ISearchParams {
             _price: queryParams._price,
             _category: queryParams._category,
             _rating: queryParams._rating,
-        },
-        (value) => isUndefined(value) || value === ''
+        }, isUndefined
     ) as unknown as ISearchParams
     return queryConfig
 }

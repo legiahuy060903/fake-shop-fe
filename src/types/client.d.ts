@@ -13,7 +13,16 @@ declare global {
         _publish_date?: string;
     }
 
-
+    interface AppContextInterface {
+        cart: ICart[]
+        setCart: React.Dispatch<React.SetStateAction<ICart[]>>
+        category: ICategory[]
+        setCategory: React.Dispatch<React.SetStateAction<ICategory[]>>
+        reset: () => void
+        getTotal: () => number
+        openDrawFilter: boolean
+        setOpenDrawFilter: React.Dispatch<React.SetStateAction<boolean>>
+    }
     interface ICart {
         count_buy: number,
         price_buy: number,

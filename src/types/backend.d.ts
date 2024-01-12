@@ -57,10 +57,9 @@ declare global {
         success: boolean;
         data?: T;
         meta?: {
-            current: number;
-            pageSize: number;
-            pages: number;
-            total: number;
+            _page?: number;
+            _limit?: number;
+            total?: number;
         }
     }
 

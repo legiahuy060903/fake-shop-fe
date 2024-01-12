@@ -5,9 +5,10 @@ import { Autoplay, Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation';
+import { useHasMounted } from '@/hooks/hasMount';
 
 const Banner = () => {
-
+    const mount = useHasMounted();
     const slides = ["https://res.cloudinary.com/dbru1hnfl/image/upload/v1688113276/banner/Stem_mainbanner_T6_Slide_840x320_igoi9v.jpg",
         "https://res.cloudinary.com/dbru1hnfl/image/upload/v1688113267/banner/Backtoschool_trangtong_mainbanner_Slide_840x320_u1q2t5.jpg",
         "https://res.cloudinary.com/dbru1hnfl/image/upload/v1688113262/banner/Fahasasalethu3_mainbanner_Bo1_Slider_840x320_xfmrvp.jpg",
@@ -16,8 +17,9 @@ const Banner = () => {
 
     return (
         <>
-            <div className='overflow-hidden mx-auto flex gap-x-3 bg-white rounded-md '>
-                <div className='xs:w-full w-[70%] relative bg-white rounded-md '>
+
+            <div className='overflow-hidden mx-auto flex gap-x-3 bg-white rounded-md'>
+                <div className='xs:w-full w-[70%] relative rounded-md overflow-hidden'>
                     <Swiper
                         modules={[Autoplay, Navigation, Pagination]}
                         loop={false}
@@ -31,12 +33,11 @@ const Banner = () => {
                         }}
                         className="mySwiper"
                     >
-                        {slides?.map((slideContent, index) => (
-                            <SwiperSlide key={index}>
-                                <img src={slideContent} />
+                        {slides?.map((slideContent) => (
+                            <SwiperSlide key={slideContent}>
+                                <img src={slideContent} className='h-full object-cover' />
                             </SwiperSlide>
                         ))}
-
                     </Swiper>
                 </div>
 
@@ -48,7 +49,7 @@ const Banner = () => {
                         <img src="https://cdn0.fahasa.com/media/wysiwyg/Thang-06-2023/PNJT6_392x156.png" alt="" className='w-full h-full rounded-md' />
                     </div>
                 </div>
-            </div >
+            </div>
             <div className="bg-white rounded-md grid xs:grid-cols-2 place-content-center grid-cols-4 place-items-center gap-5 my-3 p-2">
                 <img src="https://cdn0.fahasa.com/media/wysiwyg/Thang-06-2023/SubBannerT6_Coupon_310x210-06.png" />
                 <img src="https://cdn0.fahasa.com/media/wysiwyg/Thang-06-2023/TrangBalo_Resize_310x210.png" />

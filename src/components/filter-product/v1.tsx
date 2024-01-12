@@ -1,36 +1,29 @@
 "use client"
-import { useCallback, useContext, useMemo } from "react"
+import { useCallback, useMemo } from "react"
 import { Checkbox, Divider, Rate } from 'antd';
-import { AppContext } from "@/contexts/store"
 import { CheckboxValueType } from "antd/es/checkbox/Group";
-import useQueryConfig from "@/hooks/useSearchParam";
-import { useRouter } from "next/navigation";
-import queryString from 'query-string';
 import { splitRanges, convertText } from "@/utils/const";
-import { useHasMounted } from "@/hooks/hasMount";
-import SkeletonCustom from "@/components/skeleton/v1";
 
+import SkeletonCustom from "@/components/skeleton/v1";
+import withBaseMethod, { WithBaseMethodProps } from "@/hooks/withBaseMethod";
 type TodoPreview = Pick<ISearchParams, "_category" | "_price" | "_publish_date">;
 const typeOpe: TodoPreview = {
     _category: "in_",
     _price: "between_",
     _publish_date: "in_",
 }
-const FilterShop = () => {
-    const { category } = useContext(AppContext);
-    const query = useQueryConfig();
-    const router = useRouter();
-    const mount = useHasMounted()
-    const checkCategory = splitRanges(query._category || undefined, 1);
-    const checkPrice = splitRanges(query._price || undefined);
+const FilterShop = ({ contexts, queryString, router, queryConfig, mount }: WithBaseMethodProps) => {
+    const { category } = contexts;
+    const checkCategory = splitRanges(queryConfig._category || undefined, 1);
+    const checkPrice = splitRanges(queryConfig._price || undefined);
 
     const onChangeFilter = useCallback((e: CheckboxValueType[], type: keyof TodoPreview) => {
-        const updatedQuery: ISearchParams = { ...query, [type]: e.length > 0 ? typeOpe[type] + e.join('_') : undefined };
+        const updatedQuery: ISearchParams = { ...queryConfig, [type]: e.length > 0 ? typeOpe[type] + e.join('_') : undefined };
         router.push('shop?' + queryString.stringify(updatedQuery));
-    }, [query, typeOpe, router]);
+    }, [queryConfig, typeOpe, router]);
     const onChangeFilterRate = useCallback((value: number) => {
-        router.push('shop?' + queryString.stringify({ ...query, _rating: value > 1 ? value : undefined }));
-    }, [query, router]);
+        router.push('shop?' + queryString.stringify({ ...queryConfig, _rating: value > 1 ? value : undefined }));
+    }, [queryConfig, router]);
 
     const optionsPrice = useMemo(() => [
         { label: <span className="p-2 text-base font-normal text-gray-500 ">Từ 0đ-150,000đ</span>, value: "0_150000" },
@@ -67,7 +60,7 @@ const FilterShop = () => {
             <Divider />
             <div className="text-black  py-4">Đánh giá sao</div>
             <div>
-                <Rate onChange={(value) => onChangeFilterRate(value)} defaultValue={query._rating || 5} />
+                <Rate onChange={(value) => onChangeFilterRate(value)} defaultValue={queryConfig._rating || 5} />
             </div>
             <Divider />
             <div className="text-black  py-4">Năm ra mắt</div>
@@ -77,4 +70,4 @@ const FilterShop = () => {
     )
 }
 
-export default FilterShop
+export default withBaseMethod(FilterShop) 

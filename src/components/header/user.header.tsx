@@ -1,37 +1,31 @@
 "use client"
 import "@/styles/header.css";
-import { usePathname, useRouter } from 'next/navigation';
 import { BiCategoryAlt, BiUser } from 'react-icons/bi';
 import { AiOutlineSearch, AiOutlineShoppingCart, AiOutlineHeart } from 'react-icons/ai';
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Input, Dropdown, Space, Drawer, Popover, Col, Avatar, Menu, message, Badge } from 'antd';
 import { LayoutTwoTone, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
-import PopoverCustom from "./_sub/pop";
-import { omit } from 'lodash';
 import Link from 'next/link';
-import useQueryConfig from '@/hooks/useSearchParam';
-import { sendRequest } from '@/hooks/sendRequest';
 import { url } from '@/utils/const';
-import { signOut, useSession } from "next-auth/react";
-import { signIn } from "next-auth/react"
-import { AppContext } from "@/contexts/store";
+import { signOut } from "next-auth/react";
 import FilterShop from "../filter-product/v1";
+import PopoverCustom from "./_sub/pop";
+
+import withBaseMethod, { WithBaseMethodProps } from "@/hooks/withBaseMethod";
+import useDebounce from "@/hooks/useDebounce ";
 interface IMenu {
     label: any,
     key: string | number
 }
 
-const Header = () => {
-    const router = useRouter();
-    const pathname = usePathname();
-    const { data, status } = useSession();
+const Header = ({ session, router, pathname, contexts, queryString, sendRequest, queryConfig }: WithBaseMethodProps) => {
+    const { data, status } = session;
     const [listCategory, setListCategory] = useState<IMenu[] | undefined>();
-    const [search, setSearch] = useState('');
-    const [widthImage, setWidthImage] = useState(150);
-    const queryConfig = useQueryConfig();
-    const { setCategory, setOpenDrawFilter, openDrawFilter } = useContext(AppContext)
 
+    const [search, setSearch] = useState<string>(queryConfig.search || '');
+    const debouncedValue = useDebounce(search, 500)
+    const { setCategory, setOpenDrawFilter, openDrawFilter } = contexts
     const fetchData = useCallback(async () => {
         const response = await sendRequest<IBackendRes<ICategory[]>>({ url: `${url}categories` });
         if (response && response.data) {
@@ -39,9 +33,7 @@ const Header = () => {
             let data: IMenu[] = response?.data?.map((item: ICategory) => ({
                 key: item.id,
                 label: <Link className='item-cat' href={{
-                    pathname: '/shop', search: new URLSearchParams({
-                        _category: `in_${item.id}`
-                    }).toString()
+                    pathname: '/shop', search: queryString.stringify({ ...queryConfig, _category: `in_${item.id}` })
                 }}>
                     {item.name}
                 </Link>
@@ -101,36 +93,23 @@ const Header = () => {
     //         key: 'admin',
     //     });
     // }
-
+    useEffect(() => {
+        onSubmitSearch()
+    }, [debouncedValue]);
     const handleBoxCat = () => {
         if (window.innerWidth < 768) setOpenDrawFilter(true)
     }
 
-
-    // window.addEventListener("resize", function () {
-    //     (window.innerWidth <= 1024) ? setWidthImage(120) : setWidthImage(150);
-    // });
-    // let last = 0;
-    // window.addEventListener('scroll', () => {
-    //     if (!window.location.pathname.startsWith('/admin')) {
-    //         let headers = document.querySelector('.header-area');
-    //         let scrollTop = window.scrollY || document.documentElement.scrollTop;
-    //         (scrollTop > last) ? headers.style.top = '-120px' : headers.style.top = '0px';
-    //         last = scrollTop;
-    //     }
-    // });
-
-    const onSubmitSearch = (e: any) => {
-        if (search.length > 0) {
-
-        }
+    const onSubmitSearch = () => {
+        router.push("/shop?" + queryString.stringify({ ...queryConfig, search }));
     }
+
     const cart: any = []
     const wish: any = []
     return (
         <div className='bg-white w-full xs:h-[64px] h-[84px] text-gray-500 sticky top-0 z-50 transition duration-300'>
             <div className=' w-full xs:px-5 px-16 flex flex-wrap items-center justify-between h-full m-auto cursor-pointer'>
-                <Link href={'/'} className=' xs:w-0 w-3/12'> <img src={"logo.png"} width={widthImage} /></Link>
+                <Link href={'/'} className=' xs:w-0 w-3/12'> <img src={"logo.png"} width={130} /></Link>
                 <div className="md:hidden inline-block">
                     <Dropdown
                         overlayStyle={{ top: 74, left: "25%", position: "fixed", zIndex: 10 }}
@@ -149,8 +128,8 @@ const Header = () => {
                     </a>
                 </div>
                 <div className=' flex-1 h-[75%] relative flex items-center'>
-                    <Input placeholder="Tìm kiếm sản phẩm" value={search} onPressEnter={(e) => onSubmitSearch(e)} onChange={(e) => setSearch(e.target.value)} size='large' style={{ padding: 10 }} />
-                    <button className='absolute right-3 bg-main text-[aliceblue] rounded-xl py-2 px-4 flex justify-center items-center' onClick={() => onSubmitSearch('submit')}><AiOutlineSearch /></button>
+                    <Input placeholder="Tìm kiếm sản phẩm" value={search} onChange={(e) => setSearch(e.target.value)} size='large' style={{ padding: 10 }} />
+                    <button className='absolute right-3 bg-main text-[aliceblue] rounded-xl py-2 px-4 flex justify-center items-center' onClick={onSubmitSearch}><AiOutlineSearch /></button>
                 </div>
                 <div className=" xs:w-1/12 w-3/12 xs:ms-2 flex justify-end items-center gap-x-5 ">
                     <div className="nav-icon ">
@@ -196,4 +175,4 @@ const Header = () => {
     )
 }
 
-export default Header
+export default withBaseMethod(Header) 

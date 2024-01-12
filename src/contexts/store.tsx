@@ -1,18 +1,6 @@
 "use client"
 
 import { createContext, useState } from 'react';
-
-interface AppContextInterface {
-    cart: ICart[]
-    setCart: React.Dispatch<React.SetStateAction<ICart[]>>
-    category: ICategory[]
-    setCategory: React.Dispatch<React.SetStateAction<ICategory[]>>
-    reset: () => void
-    getTotal: () => number
-    openDrawFilter: boolean
-    setOpenDrawFilter: React.Dispatch<React.SetStateAction<boolean>>
-}
-
 export const getInitialAppContext: () => AppContextInterface = () => ({
     cart: [],
     setCart: () => null,

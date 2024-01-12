@@ -1,23 +1,19 @@
 "use client"
-import { useContext, useMemo } from "react"
+import { useMemo } from "react"
 
-import useQueryConfig from "@/hooks/useSearchParam";
-import { useRouter } from "next/navigation";
-import queryString from 'query-string';
-import { Grid, Select } from "antd";
+import { Select } from "antd";
 import { FaFilter } from "react-icons/fa";
-import { AppContext } from "@/contexts/store";
-const { useBreakpoint } = Grid;
-const SorterShop = () => {
-    const query = useQueryConfig();
-    const router = useRouter();
-    const screens = useBreakpoint();
-    const { setOpenDrawFilter } = useContext(AppContext)
+import withBaseMethod, { WithBaseMethodProps } from "@/hooks/withBaseMethod";
+
+
+const SorterShop = ({ queryConfig, router, queryString, screens, contexts }: WithBaseMethodProps) => {
+
+    const { setOpenDrawFilter } = contexts;
     const handleChange = (value: string) => {
         if (value == "0") {
-            const { _sort, _order, ...q } = query
+            const { _sort, _order, ...q } = queryConfig
             router.push('shop?' + queryString.stringify(q))
-        } else router.push('shop?' + queryString.stringify({ ...query, ...queryString.parse(value) }));
+        } else router.push('shop?' + queryString.stringify({ ...queryConfig, ...queryString.parse(value) }));
     };
     const checkSort = (router: ISearchParams) => {
         const { _sort, _order } = router;
@@ -45,7 +41,7 @@ const SorterShop = () => {
                 <Select
                     size={`${screens.sm !== false ? "large" : "middle"}`}
                     className="w-6/12"
-                    defaultValue={checkSort(query) || '0'}
+                    defaultValue={checkSort(queryConfig) || '0'}
                     style={{ width: "fit" }}
                     onChange={handleChange}
                     options={optionsSort}
@@ -53,7 +49,7 @@ const SorterShop = () => {
                 <Select
                     size={`${screens.sm !== false ? "large" : "middle"}`}
                     className="w-6/12"
-                    defaultValue={`_limit=${query._limit || 12}`}
+                    defaultValue={`_limit=${queryConfig._limit || 12}`}
                     style={{ width: "fit" }}
                     onChange={handleChange}
                     options={optionsLimit}
@@ -65,4 +61,4 @@ const SorterShop = () => {
     )
 }
 
-export default SorterShop
+export default withBaseMethod(SorterShop) 
