@@ -4,6 +4,7 @@ import { Avatar, Button, Checkbox, Divider, Form, Input, message } from 'antd';
 
 import { Roboto } from 'next/font/google'
 import { signIn } from 'next-auth/react';
+import { useRouter, useSearchParams } from 'next/navigation'
 
 const roboto = Roboto({
     weight: '400',
@@ -18,7 +19,9 @@ type FieldType = {
 
 const FormLogin: React.FC = () => {
     const [messageApi, contextHolder] = message.useMessage();
-
+    const route = useRouter()
+    const searchParams = useSearchParams();
+    const path = searchParams.get('callbackUrl') || "/"
     const onFinish = async ({ username, password }: FieldType) => {
         const res = await signIn("credentials", { redirect: false, username, password });
         if (!res?.ok) {
@@ -26,7 +29,9 @@ const FormLogin: React.FC = () => {
                 type: 'error',
                 content: res?.error
             });
-        }
+        } else route.push(path)
+
+
     };
 
     return (
@@ -68,12 +73,12 @@ const FormLogin: React.FC = () => {
                 <Avatar
                     src="./logo/gg.png"
                     size={64}
-                    onClick={() => signIn('google')}
+                    onClick={() => signIn('google', { callbackUrl: path })}
                 />
                 <Avatar
                     src="./logo/git.png"
                     size={44}
-                    onClick={() => signIn('github')}
+                    onClick={() => signIn('github', { callbackUrl: path })}
                 />
             </div>
 

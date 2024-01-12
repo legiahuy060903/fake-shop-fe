@@ -1,10 +1,10 @@
 export { }
 declare global {
+
     interface IRequest {
         url: string;
         method?: string;
         body?: { [key: string]: any };
-        queryParams?: any;
         useCredentials?: boolean;
         headers?: any;
         nextOption?: any;
@@ -16,8 +16,30 @@ declare global {
         createdAt: Date
         updatedAt: Date
     }
-    interface IUser {
 
+    interface IProduct {
+        id: number
+        name: string;
+        description: string;
+        thumbnail: string;
+        public: boolean;
+        publish_date: Date;
+        author: string;
+        number_of_page: number;
+        amount: number;
+        sold: number;
+        rating: number;
+        price: number;
+        category: ICategory;
+        view: number;
+        images: Images;
+        createdAt: Date;
+        updatedAt: Date;
+    }
+    interface Images {
+        id: number, url: string
+    }[]
+    interface IUser {
         id: number,
         username: string | null,
         email: string,
@@ -27,7 +49,6 @@ declare global {
         address: string | null,
         role: string,
         gender: string
-
     }
     interface IBackendRes<T> {
         error?: string | string[];

@@ -1,14 +1,12 @@
 
 
-import { useSession } from 'next-auth/react';
-import queryString from 'query-string';
+
 
 export const sendRequest = async <T>(props: IRequest) => {
     let {
         url,
         method,
         body,
-        queryParams = {},
         useCredentials = false,
         headers = {},
         nextOption = {}
@@ -22,9 +20,6 @@ export const sendRequest = async <T>(props: IRequest) => {
     };
     if (useCredentials) options.credentials = "include";
 
-    if (queryParams) {
-        url = `${url}?${queryString.stringify(queryParams)}`;
-    }
 
     return fetch(url, options).then(res => {
         if (res.ok) {

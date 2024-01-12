@@ -5,9 +5,9 @@ import { getServerSession } from 'next-auth';
 import { redirect } from 'next/navigation'
 const page = async () => {
     const session = await getServerSession(authOptions);
-    if (session?.user) redirect('/')
+
     return (
-        <div className='w-full mx-auto md:w-3/6 lg:w-2/6 xs:mt-20 md:mt-16'><FormLogin /></div>
+        <div className=' mx-auto xs:w-full md:w-5/6 lg:w-7/12 w-2/6 xs:mt-20 mt-16'><FormLogin /></div>
     )
 }
 

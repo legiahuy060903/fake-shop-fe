@@ -1,0 +1,93 @@
+.review-swiper-button-next {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 50%;
+    background: white;
+    color: grey;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 100;
+    right: 10px;
+    top: 45%;
+    transition: transform 0.2s;
+}
+
+.review-swiper-button-next :hover {
+    font-size: 25px;
+    color: black;
+}
+
+.item-cat {
+    text-decoration: none;
+    font-size: 1rem;
+    color: black;
+}
+
+.review-swiper-button-prev {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    border-radius: 50%;
+    background: white;
+    color: grey;
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    z-index: 100;
+    left: 10px;
+    top: 45%;
+    transition: transform 0.2s;
+}
+
+.review-swiper-button-prev :hover {
+    font-size: 25px;
+    color: black;
+}
+
+.mySwiper2 .swiper-slide {
+    font-size: 18px;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.product-item:hover .product-show {
+    visibility: visible;
+
+}
+
+.product-item {
+    transition: transform 1s;
+    cursor: pointer;
+}
+
+.product-item:hover img {
+
+    transition-duration: 1s;
+    transform: scale(1.1);
+    filter: blur(1px);
+}
+
+
+.product-show {
+    transition-duration: 1s;
+    visibility: hidden;
+}
+
+
+@media only screen and (max-width: 1024px) {
+
+    .review-swiper-button-next {
+        display: none !important
+    }
+
+    .review-swiper-button-prev {
+        display: none !important
+    }
+
+}

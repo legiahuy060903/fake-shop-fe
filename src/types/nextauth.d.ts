@@ -6,7 +6,7 @@ declare module "next-auth/jwt" {
         user: IUser,
         access_token: string,
         refreshToken: string,
-        expires: string,
+        expires: number,
     }
 }
 declare module "next-auth" {
@@ -14,6 +14,6 @@ declare module "next-auth" {
         user: IUser,
         access_token: string,
         refreshToken: string,
-        expires: string,
+        expires: number,
     }
 }

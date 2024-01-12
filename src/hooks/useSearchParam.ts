@@ -1,28 +1,26 @@
 
-
-'use client'
-
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation';
 import omitBy from 'lodash/omitBy';
 import isUndefined from 'lodash/isUndefined';
 
-const useQuery = () => {
+
+
+
+export default function useQueryConfig(): ISearchParams {
     const searchParams = useSearchParams();
-    return Object.fromEntries(searchParams)
-}
-export default function useQueryConfig() {
-    const queryParams = useQuery()
+    const queryParams = Object.fromEntries(searchParams);
     const queryConfig = omitBy(
         {
-            page: queryParams.page || 1,
-            limit: queryParams.limit || 10,
-            sort: queryParams.sort,
+            _page: parseInt(queryParams._page) || 1,
+            _limit: parseInt(queryParams._limit) || 12,
+            _sort: queryParams._sort,
+            _order: queryParams._order,
             search: queryParams.search,
-            filterMaxPrice: queryParams.filterMaxPrice,
-            filterMinPrice: queryParams.filterMinPrice,
-            category: queryParams.category
+            _price: queryParams._price,
+            _category: queryParams._category,
+            _rating: queryParams._rating,
         },
-        isUndefined
-    )
+        (value) => isUndefined(value) || value === ''
+    ) as unknown as ISearchParams
     return queryConfig
 }

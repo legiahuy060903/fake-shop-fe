@@ -1,6 +1,5 @@
 import { NextAuthOptions } from 'next-auth';
 import GoogleProvider from 'next-auth/providers/google';
-import FacebookProvider from 'next-auth/providers/facebook';
 import GithubProvider from 'next-auth/providers/github';
 import CredentialsProvider from "next-auth/providers/credentials";
 import { sendRequest } from '@/hooks/sendRequest';
@@ -10,7 +9,7 @@ import { JWT } from 'next-auth/jwt';
 async function refreshAccessToken(refreshToken: string) {
     const { data, success, message } = await sendRequest<IBackendRes<JWT>>({ url: `${url}auth/refresh`, body: { refreshToken }, method: "POST" });
     if (success) return data as any;
-    else throw new Error(message)
+    else return { auth: false, error: message }
 }
 
 export const authOptions: NextAuthOptions = {
@@ -58,17 +57,15 @@ export const authOptions: NextAuthOptions = {
                 return token
             }
             if (trigger === "signIn" && account?.provider === "credentials") {
-                if (user) token = user as unknown as JWT
+                if (user) token = user as any
             }
-            if (Date.now() > +token.expires) {
-                return await refreshAccessToken(token.refreshToken)
+            if (Date.now() > token.expires) {
+                return await refreshAccessToken(token.refreshToken) as any
             }
             return token;
         },
         session({ session, token, user }) {
-            if (token) {
-                session = token;
-            }
+            if (token) session = token;
             return session
         }
     },
