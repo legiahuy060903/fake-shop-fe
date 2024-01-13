@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useRef, useState, memo, useMemo } from "react";
+import React, { memo, } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation, Keyboard } from 'swiper/modules';
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
@@ -9,21 +9,22 @@ import 'swiper/css';
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import Product from "../product/v1";
-import { useHasMounted } from "@/hooks/hasMount";
 import SkeletonCustom from "../skeleton/v1";
+import withBaseMethod, { WithBaseMethodProps } from "@/hooks/withBaseMethod";
 
-const SlideProduct = ({ data }: { data: IProduct[] }) => {
-    const mount = useHasMounted();
-    if (!mount) {
-        return <SkeletonCustom />
-    }
+type SlideProductProps = {
+    data: IProduct[];
+} & WithBaseMethodProps;
+const SlideProduct = ({ data, mount }: SlideProductProps) => {
+
+    if (!mount) return <SkeletonCustom />
+
     return (
         <div className='h-400'>
             <Swiper
                 className="mySwiper2"
                 spaceBetween={10}
                 loop={true}
-                slidesPerView={5}
                 rewind={true}
                 breakpoints={{
                     640: {
@@ -45,10 +46,14 @@ const SlideProduct = ({ data }: { data: IProduct[] }) => {
                 }}
                 modules={[Pagination, Navigation, Keyboard]}
                 keyboard={true}
+                navigation={{
+                    nextEl: ".review-swiper-button-next",
+                    prevEl: ".review-swiper-button-prev",
+                }}
             >
                 <button className='review-swiper-button-prev' > <AiOutlineArrowLeft size={20} /></button>
                 {
-                    data.map((item, i) => <SwiperSlide key={item.id}>
+                    data.map((item: IProduct) => <SwiperSlide key={item.id}>
                         <Product item={item} />
                     </SwiperSlide>)
                 }
@@ -58,6 +63,6 @@ const SlideProduct = ({ data }: { data: IProduct[] }) => {
     )
 }
 
-export default memo(SlideProduct)
+export default withBaseMethod(memo(SlideProduct))
 
 

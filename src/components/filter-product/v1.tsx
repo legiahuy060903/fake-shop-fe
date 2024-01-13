@@ -16,6 +16,7 @@ const FilterShop = ({ contexts, queryString, router, queryConfig, mount }: WithB
     const { category } = contexts;
     const checkCategory = splitRanges(queryConfig._category || undefined, 1);
     const checkPrice = splitRanges(queryConfig._price || undefined);
+    const checkPublish = splitRanges(queryConfig._publish_date || undefined, 1);
 
     const onChangeFilter = useCallback((e: CheckboxValueType[], type: keyof TodoPreview) => {
         const updatedQuery: ISearchParams = { ...queryConfig, [type]: e.length > 0 ? typeOpe[type] + e.join('_') : undefined };
@@ -41,7 +42,7 @@ const FilterShop = ({ contexts, queryString, router, queryConfig, mount }: WithB
         for (let i = 2011; i < (new Date()).getFullYear(); i++) {
             options.push({
                 label: <span className="p-2 text-base font-normal text-gray-500">{`Năm ${i}`}</span>,
-                value: i
+                value: i.toString()
             });
         }
         return options;
@@ -64,7 +65,7 @@ const FilterShop = ({ contexts, queryString, router, queryConfig, mount }: WithB
             </div>
             <Divider />
             <div className="text-black  py-4">Năm ra mắt</div>
-            <Checkbox.Group options={optionPub} onChange={(e) => onChangeFilter(e, "_publish_date")} className="box-category" defaultValue={checkPrice} />
+            <Checkbox.Group options={optionPub} onChange={(e) => onChangeFilter(e, "_publish_date")} className="box-category" defaultValue={checkPublish} />
             <Divider />
         </div>
     )

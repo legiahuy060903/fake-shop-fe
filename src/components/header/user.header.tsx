@@ -24,8 +24,8 @@ const Header = ({ session, router, pathname, contexts, queryString, sendRequest,
     const [listCategory, setListCategory] = useState<IMenu[] | undefined>();
 
     const [search, setSearch] = useState<string>(queryConfig.search || '');
-    const debouncedValue = useDebounce(search, 500)
-    const { setCategory, setOpenDrawFilter, openDrawFilter } = contexts
+    const debouncedValue = useDebounce(search, 500);
+    const { setCategory, setOpenDrawFilter, openDrawFilter } = contexts;
     const fetchData = useCallback(async () => {
         const response = await sendRequest<IBackendRes<ICategory[]>>({ url: `${url}categories` });
         if (response && response.data) {
@@ -101,7 +101,7 @@ const Header = ({ session, router, pathname, contexts, queryString, sendRequest,
     }
 
     const onSubmitSearch = () => {
-        router.push("/shop?" + queryString.stringify({ ...queryConfig, search }));
+        search.length > 0 && router.push("/shop?" + queryString.stringify({ ...queryConfig, search: search.length > 0 ? search : undefined }));
     }
 
     const cart: any = []

@@ -22,6 +22,7 @@ declare global {
         name: string;
         description: string;
         thumbnail: string;
+        slug: string;
         public: boolean;
         publish_date: Date;
         author: string;
@@ -33,6 +34,7 @@ declare global {
         category: ICategory;
         view: number;
         images: Images;
+        slides: string[];
         createdAt: Date;
         updatedAt: Date;
     }
