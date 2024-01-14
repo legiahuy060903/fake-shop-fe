@@ -7,6 +7,7 @@ const SlideProduct = dynamic(() => import('@/components/slide_product/v1'));
 const ThumbsSwiper = dynamic(() => import('./info_product/_thumb'));
 const Detail = dynamic(() => import('./info_product/_detail'));
 import "@/styles/detail.css"
+import { Suspense } from 'react';
 
 const Page = async ({ params }: { params: { slug: string } }) => {
     const { data: product } = await sendRequest<IBackendRes<IProduct>>({ url: url + "products/detail/" + params.slug, nextOption: { cache: 'no-store' } });
@@ -20,7 +21,6 @@ const Page = async ({ params }: { params: { slug: string } }) => {
                     {product && product?.slides?.length > 0 && <ThumbsSwiper images={product.slides} />}
                 </div>
                 {product && <Detail product={product} />}
-
             </div>
             {products && products.length > 0 && (<div className='rounded-lg overflow-hidden mt-2'>
                 <h2 className='bg-[#fce9df]   p-4 flex justify-start items-center gap-3'>
@@ -31,8 +31,6 @@ const Page = async ({ params }: { params: { slug: string } }) => {
             </div>)}
 
         </div>
-
-
     )
 }
 

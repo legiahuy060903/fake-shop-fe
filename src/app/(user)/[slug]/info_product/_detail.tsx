@@ -7,6 +7,7 @@ const { Title } = Typography;
 import withBaseMethod, { WithBaseMethodProps } from "@/hooks/withBaseMethod";
 import { formatGia } from '@/utils/const';
 import { AiOutlinePlus } from 'react-icons/ai';
+import SkeletonCustom from '@/components/skeleton/v1';
 
 
 type ProductProps = {
@@ -15,7 +16,7 @@ type ProductProps = {
 
 const Detail = ({ product }: ProductProps) => {
     return (
-        <div className='flex flex-col p-4 w-1/2 lg:w-full'>
+        <> <div className='flex flex-col p-4 w-1/2 lg:w-full'>
             <Title level={4}>{product.name}</Title>
             <div className='flex flex-col gap-4 mt-2 '>
                 <div className='text-gray-700 font-normal text-sm'>
@@ -32,6 +33,7 @@ const Detail = ({ product }: ProductProps) => {
                 </div>
             </div>
             <Divider />
+
             <div className='w-full '>
                 <Rate value={product.rating} /> <span> ( {product.rating} lượt đánh giá)</span>
             </div>
@@ -51,9 +53,9 @@ const Detail = ({ product }: ProductProps) => {
             </div>
             <div className=' px-4 py-2 text-white bg-red-600 border border-red-600 rounded-md text-lg font-semibold text-center cursor-pointer' >Mua ngay</div>
 
-
-
         </div>
+        </>
+
     )
 }
 

@@ -11,11 +11,12 @@ import { MdOutlineKeyboardArrowLeft, MdOutlineKeyboardArrowRight } from 'react-i
 import withBaseMethod, { WithBaseMethodProps } from "@/hooks/withBaseMethod";
 import { useMemo, useRef, useState } from 'react';
 import { Swiper, SwiperSlide, SwiperRef, useSwiper } from "swiper/react";
+import SkeletonImgCustom from "@/components/skeleton/img";
 
 type SlideProductProps = {
     images: string[];
 } & WithBaseMethodProps;
-const ThumbsSwiper = ({ images, mount }: SlideProductProps) => {
+const ThumbsSwiper = ({ images, mount, screens }: SlideProductProps) => {
     const [thumbsSwiper, setThumbsSwiper] = useState(null);
 
     return (
@@ -48,7 +49,7 @@ const ThumbsSwiper = ({ images, mount }: SlideProductProps) => {
                     <button className='next-mySwiper3'><MdOutlineKeyboardArrowRight size={30} /></button>
                 </Swiper>
             </div>
-            {mount && <div className="w-[95%] mx-auto h-36">
+            {mount ? <div className="w-[95%] mx-auto h-36 md:h-20 ">
                 <Swiper
                     //@ts-ignore
                     onSwiper={setThumbsSwiper}
@@ -69,7 +70,9 @@ const ThumbsSwiper = ({ images, mount }: SlideProductProps) => {
                     ))}
                 </Swiper>
             </div>
+                : <SkeletonImgCustom />
             }
+
         </div>
     );
 }

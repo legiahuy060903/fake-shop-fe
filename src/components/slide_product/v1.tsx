@@ -18,7 +18,6 @@ type SlideProductProps = {
 const SlideProduct = ({ data, mount }: SlideProductProps) => {
 
     if (!mount) return <SkeletonCustom />
-
     return (
         <div className='h-400'>
             <Swiper
