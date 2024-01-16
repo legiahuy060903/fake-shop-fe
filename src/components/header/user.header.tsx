@@ -8,7 +8,7 @@ import { LayoutTwoTone, UserOutlined } from '@ant-design/icons';
 import type { MenuProps } from 'antd';
 import Link from 'next/link';
 import { url } from '@/utils/const';
-import { signOut } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import FilterShop from "../filter-product/v1";
 import PopoverCustom from "./_sub/pop";
 
@@ -148,7 +148,8 @@ const Header = ({ session, router, pathname, contexts, queryString, sendRequest,
                         {data?.user ? (
                             <Dropdown menu={{ items: itemsAccount }} trigger={['click']} placement="bottomRight" >
                                 <div className='flex flex-col gap-1.5 items-center'>
-                                    {data.user.avatar ? <Avatar src={data.user.avatar} size={25} /> : <BiUser size={24} />}
+                                    {/* {data.user.avatar ? <Avatar src={data.user.avatar} size={25} /> : <BiUser size={24} />} */}
+                                    {data.user.avatar ? data?.user?.username : <BiUser size={24} />}
                                 </div>
                             </Dropdown>
                         ) : (

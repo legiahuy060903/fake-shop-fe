@@ -8,7 +8,7 @@ import dynamic from "next/dynamic";
 const SlideProduct = dynamic(() => import('@/components/slide_product/v1'));
 const Banner = dynamic(() => import('@/components/banner'));
 const Home = async () => {
-    const session = await getServerSession(authOptions);
+
     const { data: topData } = await sendRequest<IBackendRes<IProduct[]>>({ url: url + 'products?_sort=sold&_limit=10' })
     const { data: topView } = await sendRequest<IBackendRes<IProduct[]>>({ url: url + 'products?_sort=view&_limit=10' })
 

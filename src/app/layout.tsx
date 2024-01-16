@@ -6,6 +6,7 @@ import { Inter } from 'next/font/google'
 const inter = Inter({ subsets: ['latin'] })
 import "./globals.css";
 import { AppProvider } from "@/contexts/store";
+
 export default function RootLayout({
     children,
 }: {
@@ -16,9 +17,7 @@ export default function RootLayout({
             <body className={inter.className} suppressHydrationWarning={true} >
                 <AntdRegistry>
                     <SessionWrapper>
-                        <AppProvider>
-                            {children}
-                        </AppProvider>
+                        <AppProvider>{children} </AppProvider>
                     </SessionWrapper>
                 </AntdRegistry>
             </body>

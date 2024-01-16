@@ -41,6 +41,17 @@ declare global {
     interface Images {
         id: number, url: string
     }[]
+    interface IComment {
+        id: number;
+        content: string;
+        block: boolean;
+        user: IUser;
+        product: IProduct;
+        rate: number;
+        like: number;
+        createdAt: Date;
+        updatedAt: Date;
+    }
     interface IUser {
         id: number,
         username: string | null,
