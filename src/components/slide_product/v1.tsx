@@ -1,7 +1,7 @@
 "use client"
 import React, { memo, } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation, Keyboard } from 'swiper/modules';
+import { Pagination, Navigation, Keyboard, Autoplay } from 'swiper/modules';
 import { AiOutlineArrowLeft, AiOutlineArrowRight } from 'react-icons/ai';
 
 import "@/styles/slide.css";
@@ -43,12 +43,13 @@ const SlideProduct = ({ data, mount }: SlideProductProps) => {
                         spaceBetween: 10,
                     }
                 }}
-                modules={[Pagination, Navigation, Keyboard]}
+                modules={[Pagination, Navigation, Keyboard, Autoplay]}
                 keyboard={true}
                 navigation={{
                     nextEl: ".review-swiper-button-next",
                     prevEl: ".review-swiper-button-prev",
                 }}
+                autoplay
             >
                 <button className='review-swiper-button-prev' > <AiOutlineArrowLeft size={20} /></button>
                 {

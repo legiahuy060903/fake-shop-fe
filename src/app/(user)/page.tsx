@@ -8,10 +8,15 @@ import dynamic from "next/dynamic";
 const SlideProduct = dynamic(() => import('@/components/slide_product/v1'));
 const Banner = dynamic(() => import('@/components/banner'));
 const Home = async () => {
-
-    const { data: topData } = await sendRequest<IBackendRes<IProduct[]>>({ url: url + 'products?_sort=sold&_limit=10' })
-    const { data: topView } = await sendRequest<IBackendRes<IProduct[]>>({ url: url + 'products?_sort=view&_limit=10' })
-
+    const requests = [
+        sendRequest<IBackendRes<IProduct[]>>({ url: url + 'products?_sort=sold&_limit=10' }),
+        sendRequest<IBackendRes<IProduct[]>>({ url: url + 'products?_sort=view&_limit=10' }),
+        sendRequest<IBackendRes<IProduct[]>>({ url: url + 'products?_sort=per_discount&_limit=10' }),
+    ];
+    const [topDataResponse, topViewResponse, topDiscountResponse] = await Promise.all(requests);
+    const topData = topDataResponse.data;
+    const topView = topViewResponse.data;
+    const topDiscount = topDiscountResponse.data;
     return (
         <div className=' xs:w-full lg:w-11/12 w-10/12 mx-auto  mt-3'>
             <Banner />
@@ -28,6 +33,13 @@ const Home = async () => {
                     Sản phẩm nhiều lượt xem
                 </h2>
                 <SlideProduct data={topView || []} />
+            </div>
+            <div className='rounded-lg overflow-hidden mt-2'>
+                <h2 className='bg-[#fce9df]   p-4 flex justify-start items-center gap-3'>
+                    <img className="w-12 rounded-lg" src="https://cdn0.fahasa.com/media/wysiwyg/icon-menu/Icon_XuHuong_Thuong_120x120.png" />
+                    Sản phẩm giảm giá
+                </h2>
+                <SlideProduct data={topDiscount || []} />
             </div>
         </div>
 

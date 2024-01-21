@@ -9,7 +9,9 @@ const { useBreakpoint } = Grid;
 import { sendRequest } from './sendRequest';
 import { AppContext } from '@/contexts/store';
 import queryString from 'query-string';
+import { customRevalidateTag } from '@/revalidateTag';
 export type WithBaseMethodProps = {
+  customRevalidateTag: (tag: string) => void;
   queryConfig: ISearchParams;
   mount: boolean;
   router: ReturnType<typeof useRouter>;
@@ -20,7 +22,6 @@ export type WithBaseMethodProps = {
   sendRequest: <T>(props: IRequest) => Promise<T>;
   queryString: typeof queryString;
   [key: string]: any
-
 };
 
 const withBaseMethod = <P extends WithBaseMethodProps>(Component: React.ComponentType<P>) => (props: Partial<WithBaseMethodProps>) => {
@@ -44,6 +45,7 @@ const withBaseMethod = <P extends WithBaseMethodProps>(Component: React.Componen
       contexts={contexts}
       sendRequest={sendRequest}
       queryString={queryString}
+      customRevalidateTag={customRevalidateTag}
     />
   );
 };

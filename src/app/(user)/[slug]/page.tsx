@@ -1,5 +1,5 @@
 import { sendRequest } from '@/hooks/sendRequest'
-import { formatGia, url } from '@/utils/const'
+import { tagProduct, url } from '@/utils/const'
 
 import "@/styles/detail.css"
 import dynamic from 'next/dynamic';
@@ -14,7 +14,7 @@ import { notFound } from 'next/navigation';
 
 
 const Page = async ({ params }: { params: { slug: string } }) => {
-    const { data: product } = await sendRequest<IBackendRes<IProduct>>({ url: url + "products/detail/" + params.slug, nextOption: { cache: 'no-store' } });
+    const { data: product } = await sendRequest<IBackendRes<IProduct>>({ url: url + "products/detail/" + params.slug, nextOption: { cache: 'no-store', tags: [tagProduct] } });
     const { data: products } = await sendRequest<IBackendRes<IProduct[]>>({ url: url + `products?_category=in_${product?.category?.id}&_id=not_${product?.id}` });
 
     if (!product) notFound()

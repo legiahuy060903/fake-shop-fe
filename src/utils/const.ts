@@ -6,6 +6,12 @@ export const url = process.env.NEXT_PUBLIC_SERVER_URL;
 export const formatGia = (params: number) => {
     return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(params)
 }
+export const tagProduct = "product-detail"
+export const perDiscount = ({ per_discount, price }: IProduct) => {
+    const gia = per_discount ? price * ((100 - Number(per_discount)) / 100) : price;
+    return gia
+}
+
 
 export const formatTimeAgo = (timestamp: Date | string): string => {
     const now = moment();

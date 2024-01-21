@@ -26,16 +26,11 @@ export const authOptions: NextAuthOptions = {
                     url: `${url}auth/login`, method: "POST",
                     body: { username: credentials?.username, password: credentials?.password }
                 })
-
                 if (res && res.data) return res.data as any;
                 else throw new Error(res.message)
             }
         }),
 
-        // FacebookProvider({
-        //     clientId: process.env.FACEBOOK_ID as string,
-        //     clientSecret: process.env.FACEBOOK_SECRET as string
-        // }),
         GoogleProvider({
             clientId: process.env.GOOGLE_ID as string,
             clientSecret: process.env.GOOGLE_SECRET as string
@@ -59,9 +54,7 @@ export const authOptions: NextAuthOptions = {
             if (trigger === "signIn" && account?.provider === "credentials") {
                 if (user) token = user as any
             }
-            if (Date.now() > token.expires) {
-                return await refreshAccessToken(token.refreshToken) as any
-            }
+            if (Date.now() > token.expires) return await refreshAccessToken(token.refreshToken) as any
             return token;
         },
         session({ session, token, user }) {

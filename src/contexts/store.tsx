@@ -1,13 +1,14 @@
 "use client"
 
-import { createContext, useState } from 'react';
+import { createContext, useReducer, useState } from 'react';
+import { shopReducer } from './cart.reducer';
+export const initCart: ICart = { purchase: [], count_buy: 0, total_buy: 0 };
 export const getInitialAppContext: () => AppContextInterface = () => ({
-    cart: [],
-    setCart: () => null,
+    cart: initCart,
+    dispatch: () => { },
     category: [],
     setCategory: () => null,
     reset: () => null,
-    getTotal: () => 0,
     openDrawFilter: false, setOpenDrawFilter: () => null,
 })
 
@@ -24,18 +25,15 @@ export const AppProvider = ({
 }) => {
 
     const [openDrawFilter, setOpenDrawFilter] = useState<boolean>(false);
-    const [cart, setCart] = useState<ICart[]>(defaultValue.cart);
-    const [category, setCategory] = useState<ICategory[]>(defaultValue.category)
-    const getTotal = () => cart.reduce((con, item) => (con + item.price_buy * item.price_buy), 0);
+    const [cart, dispatch] = useReducer(shopReducer, defaultValue.cart);
+    const [category, setCategory] = useState<ICategory[]>(defaultValue.category);
 
     const reset = () => {
-        setCart([])
-        setCategory([])
     }
     return (
         <AppContext.Provider
             value={{
-                cart, setCart, reset, getTotal, category, setCategory, openDrawFilter, setOpenDrawFilter
+                dispatch, cart, reset, category, setCategory, openDrawFilter, setOpenDrawFilter
             }}
         >
             {children}

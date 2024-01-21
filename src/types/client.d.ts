@@ -14,19 +14,29 @@ declare global {
     }
 
     interface AppContextInterface {
-        cart: ICart[]
-        setCart: React.Dispatch<React.SetStateAction<ICart[]>>
+        cart: ICart
+        // setCart: React.Dispatch<React.SetStateAction<ICart[]>>
         category: ICategory[]
         setCategory: React.Dispatch<React.SetStateAction<ICategory[]>>
         reset: () => void
-        getTotal: () => number
+        dispatch: React.Dispatch<IAction>,
+        // getTotal: () => number
         openDrawFilter: boolean
         setOpenDrawFilter: React.Dispatch<React.SetStateAction<boolean>>
     }
+    interface IProductPurchase {
+        id: number;
+        name: string;
+        price: number;
+        thumbnail: string;
+        per_discount?: string | null;
+        qty_buy: number;
+        price_buy: number;
+    }
     interface ICart {
-        count_buy: number,
-        price_buy: number,
-        product: IProduct
+        total_buy: number;
+        count_buy: number;
+        purchase: IProductPurchase[]
     }
 
 
